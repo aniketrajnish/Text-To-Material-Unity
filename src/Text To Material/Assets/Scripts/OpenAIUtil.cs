@@ -49,7 +49,6 @@ namespace T2M
             {
                 var json = post.downloadHandler.text;
                 var _data = JsonUtility.FromJson<OpenAI.imgResponse>(json);
-                Debug.Log(_data.data[0].url);
                 return _data.data[0].url; 
             }
             catch (System.Exception ex)
@@ -103,4 +102,4 @@ namespace T2M
 
     }
 
-} // namespace T2M
+} 

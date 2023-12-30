@@ -91,9 +91,6 @@ namespace T2M
             {
                 T2MGenerator.GenerateMaterial(settings, materialPrompt, texturePrompt, generatedMaterialPath);
             }
-        }
-
-
-        
+        } 
     }
 }
