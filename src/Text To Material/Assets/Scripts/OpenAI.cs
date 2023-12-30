@@ -1,5 +1,11 @@
 namespace T2M.OpenAI
 {
+    /// <summary>
+    /// ref0 - https://github.com/keijiro/AICommand/blob/main/Assets/Editor/OpenAI.cs
+    /// ref1 - https://platform.openai.com/docs/api-reference/chat
+    /// ref2 - https://platform.openai.com/docs/api-reference/images
+    /// Declaring API endpoints and response formats for both chat completion and image generation.
+    /// </summary>
     public static class Api
     {
         public const string Url = "https://api.openai.com/v1/chat/completions";

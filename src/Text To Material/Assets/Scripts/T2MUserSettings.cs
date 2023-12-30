@@ -1,5 +1,9 @@
 namespace T2M
 {
+    /// <summary>
+    /// These enums determine the various settings to be used while generating the materials.
+    /// This includes the model types, and the various properties of texture output that user wants.
+    /// </summary>
     public enum GPTModelType
     {
         GPT4,
