@@ -24,7 +24,7 @@ namespace T2M
         {
             return gptModel switch
             {
-                GPTModelType.GPT4 => "gpt-4",
+                GPTModelType.GPT4 => "gpt-4-1106-preview",
                 GPTModelType.GPT3_5TURBO => "gpt-3.5-turbo",
                 _ => throw new ArgumentOutOfRangeException(nameof(gptModel), gptModel, null)
             };
@@ -103,7 +103,7 @@ namespace T2M
                 Texture2D texAsset = AssetDatabase.LoadAssetAtPath<Texture2D>(texPath); // ref to the texture images saved for the material
                 Texture2D normAsset = AssetDatabase.LoadAssetAtPath<Texture2D>(normPath);
 
-                Material newMaterial = new Material(Shader.Find("Standard"));
+                Material newMaterial = new Material(Shader.Find("HDRP/Lit"));
 
                 string matPath = $"{generatedMaterialPath}/T2M_Mat_{dateTime}.mat";
                 AssetDatabase.CreateAsset(newMaterial, matPath);
@@ -287,22 +287,21 @@ namespace T2M
         {
             material.color = values.Albedo;
             material.SetFloat("_Metallic", values.Metallic);
-            material.SetFloat("_Glossiness", values.Smoothness);
+            material.SetFloat("_Smoothness", values.Smoothness);
 
-            material.SetTextureScale("_MainTex", values.Tiling);
-            material.SetTextureOffset("_MainTex", values.Offset);
+            material.SetTextureScale("_BaseColorMap", values.Tiling);
+            material.SetTextureOffset("_BaseColorMap", values.Offset);
 
-            material.SetTexture("_MainTex", texture);
+            material.SetTexture("_BaseColorMap", texture);
             if (normalMap != null)
             {
-                material.SetTexture("_BumpMap", normalMap);
-                material.EnableKeyword("_NORMALMAP");
+                material.SetTexture("_NormalMap", normalMap);
             }
 
             if (values.Emission != default(Color))
             {
-                material.SetColor("_EmissionColor", values.Emission);
-                material.EnableKeyword("_EMISSION");
+                material.SetColor("_EmissiveColor", values.Emission);
+                material.EnableKeyword("_UseEmissiveIntensity");
             }
         }
     }
