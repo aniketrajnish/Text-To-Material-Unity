@@ -23,3 +23,6 @@ Contributions to the project are welcome. Currently working on:
   
 ## License
 MIT License
+
+## Acknowledgement
+Thankful to Keijiro Takahashi for his [AI Command Project](https://github.com/keijiro/AICommand).
