@@ -1,4 +1,5 @@
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine.Networking;
 
@@ -97,4 +98,5 @@ namespace T2M
 
     }
 
-} 
+}
+#endif

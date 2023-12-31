@@ -1,4 +1,5 @@
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 
 namespace T2M
@@ -85,3 +86,4 @@ namespace T2M
         } 
     }
 }
+#endif

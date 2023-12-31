@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.IO;
+#if UNITY_EDITOR
 using Unity.EditorCoroutines.Editor;
 using UnityEditor;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace T2M
 {
     /// <summary>
     /// This static class is meant to generate the materials.
+    /// We parse a txt file containing the additional prompts and send it to the API.
     /// We set the material properties, generate texture, convert it to normal map.
     /// We then apply the generated texture map and normal map to the material.
     /// </summary>
@@ -63,18 +65,11 @@ namespace T2M
             if (!Directory.Exists(generatedMaterialPath))
                 AssetDatabase.CreateFolder(Path.GetDirectoryName(generatedMaterialPath), Path.GetFileName(generatedMaterialPath));
 
-            string specificMatPrompt = $"Generate a Unity Standard Shader material with the following characteristics: {matPrompt}. " +
-                "Please provide the material properties in the following format: Albedo: [color], Metallic: [value], Smoothness: [value], " +
-                "Emission: [color]. For Tiling and Offset, provide two values separated by a space, in the format 'x y'. " +
-                "Example format for Tiling and Offset: 'Tiling: 1 1', 'Offset: 0 0'." +
-                "Please provide the material properties in the specified format without brackets." +
-                "For example: Albedo: red, Metallic: 1, Smoothness: 1, Emission: red, Tiling: 10 10, Offset: 0 0"; // return response in a specified format to be parsed
+            string specificMatPrompt = GetMaterialPrompt(matPrompt); // return response in a specified format to be parsed
+            string specificTexPrompt = GetTexturePrompt(texPrompt); // return seamless textures
 
-            string specificTexPrompt = $"Create a high-quality, strictly seamless texture that can be tiled flawlessly for a 3D material, matching these characteristics: {texPrompt}. " +
-                "The texture must have absolutely no visible seams or discontinuities, ensuring it can be tiled repeatedly without any noticeable edges. " +
-                "It should also be evenly lit and high-resolution to support close-up views and detailed rendering without pixelation."; // return seamless textures
-
-            string materialProperties = OpenAIUtil.InvokeChat(specificMatPrompt, GetSelectedGPTModel(settings.GPT_MODEL));            
+            string materialProperties = OpenAIUtil.InvokeChat(specificMatPrompt, GetSelectedGPTModel(settings.GPT_MODEL));   
+            
             MaterialProperties materialValues = ParseMaterialProperties(materialProperties);
 
             string textureUrl = OpenAIUtil.InvokeImage(specificTexPrompt, GetSelectedDalleModel(settings.DALLE_MODEL), 
@@ -115,6 +110,32 @@ namespace T2M
                 ApplyMaterialProperties(newMaterial, materialValues, texAsset, normAsset);
                
             }, normStrength));
+        }
+        // converting a text file to array of strings
+        private static string[] ReadPromptsFromFile(string filePath)
+        {
+            if (File.Exists(filePath))
+            {
+                string[] lines = File.ReadAllLines(filePath); // each element of array is 1 line
+                return lines;
+            }
+            else
+            {
+                Debug.LogError("File not found: " + filePath);
+                return new string[0];
+            }
+        }
+
+        public static string GetMaterialPrompt(string matPrompt)
+        {
+            string[] prompts = ReadPromptsFromFile(Path.Combine(Application.dataPath, "Scripts/T2M/prompts.txt")); 
+            return string.Format(prompts.Length > 0 ? prompts[0] : "", matPrompt); // 1st line - mat prompt
+        }
+
+        public static string GetTexturePrompt(string texPrompt)
+        {
+            string[] prompts = ReadPromptsFromFile(Path.Combine(Application.dataPath, "Scripts/T2M/prompts.txt")); // 2nd line - tex prompt
+            return string.Format(prompts.Length > 1 ? prompts[1] : "", texPrompt);
         }
         // download the image from the response url
         public static IEnumerator DownloadTextureFromUrl(string url, System.Action<Texture2D, Texture2D> onCompleted, float normalStrength = 100.0f)
@@ -205,10 +226,14 @@ namespace T2M
                 switch (key)
                 {
                     case "Albedo":
-                        Color albedoColor;
-                        if (ColorUtility.TryParseHtmlString(value, out albedoColor))
+                        string[] rgba1 = value.Split(' ');
+                        if (rgba1.Length == 4 &&
+                            float.TryParse(rgba1[0], out float r1) &&
+                            float.TryParse(rgba1[1], out float g1) &&
+                            float.TryParse(rgba1[2], out float b1) &&
+                            float.TryParse(rgba1[3], out float a1))
                         {
-                            values.Albedo = albedoColor;
+                            values.Albedo = new Color(r1, g1, b1, a1);
                         }
                         break;
                     case "Metallic":
@@ -222,12 +247,16 @@ namespace T2M
                         {
                             values.Smoothness = smoothness;
                         }
-                        break;
+                        break;                    
                     case "Emission":
-                        Color emissionColor;
-                        if (ColorUtility.TryParseHtmlString(value, out emissionColor))
+                        string[] rgba2 = value.Split(' ');
+                        if (rgba2.Length == 4 &&
+                            float.TryParse(rgba2[0], out float r2) &&
+                            float.TryParse(rgba2[1], out float g2) &&
+                            float.TryParse(rgba2[2], out float b2) &&
+                            float.TryParse(rgba2[3], out float a2))
                         {
-                            values.Emission = emissionColor;
+                            values.Emission = new Color(r2, g2, b2, a2);
                         }
                         break;
                     case "Tiling":
@@ -260,9 +289,9 @@ namespace T2M
             material.SetFloat("_Metallic", values.Metallic);
             material.SetFloat("_Glossiness", values.Smoothness);
 
-
             material.SetTextureScale("_MainTex", values.Tiling);
             material.SetTextureOffset("_MainTex", values.Offset);
+
             material.SetTexture("_MainTex", texture);
             if (normalMap != null)
             {
@@ -278,3 +307,4 @@ namespace T2M
         }
     }
 }
+#endif
