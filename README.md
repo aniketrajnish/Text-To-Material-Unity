@@ -4,7 +4,7 @@ Generate materials from text prompts in Unity. Uses `chatgpt` and `dall-e` model
 https://github.com/aniketrajnish/Text-To-Material-Unity/assets/58925008/59d84850-b002-425e-aeda-0a1c67a77153
 
 ## Updates 
-* Support for URP and HDRP available now.
+* Support for URP and HDRP available now, download from the [Releases Section](https://github.com/aniketrajnish/Text-To-Material-Unity/releases/tag/v001).
 * For URP, import `Editor Coroutines` into the project from the Package Manager, if it's not available by default.
 
 ## Usage
