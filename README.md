@@ -10,7 +10,7 @@ https://github.com/aniketrajnish/Text-To-Material-Unity/assets/58925008/59d84850
 * Go to `Project Settings -> T2M -> paste your API key`
 * Right click in the Project Window, click on `Create - > T2M` to open the Text-To-Material window.
 * Enter the prompt describing the type of material and texture of the material you want to create.
-* Choose the model to use, the image size and quality(only for `dall-e-3`) for textures.
+* Choose the model to use, the image size, and the quality (only for `dall-e-3`) for textures.
 * Click on Generate. The textures and materials are generated and saved in the `Assets/T2M Materials` folder.
 * Note: `gpt-4` and `dall-e-3` might not be available for all the users.
 
