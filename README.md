@@ -26,7 +26,7 @@ Contributions to the project are welcome. Currently working on:
 * ~~Support for URP & HDRP materials.~~ [Done!]
 * Support more texture maps. (Bump map, Normal map, Roughness map etc.)
 * Support for materials based on different shaders.
-* Better prompts for texture generation, to ensure seamless textures.
+* ~~Better prompts for texture generation, to ensure seamless textures.~~ [Done!]
 * Support for materials based on custom shaders (ig ambitious).
   
 ## License
