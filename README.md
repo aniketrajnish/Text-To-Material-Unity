@@ -24,7 +24,7 @@ https://github.com/aniketrajnish/Text-To-Material-Unity/assets/58925008/59d84850
 ## Contributing
 Contributions to the project are welcome. Currently working on:
 * ~~Support for URP & HDRP materials.~~ [Done!]
-* Support more texture maps. (Bump map, Normal map, Roughness map etc.)
+* Support more texture maps. (Metallic map, Smoothness map, Roughness map etc.)
 * Support for materials based on different shaders.
 * ~~Better prompts for texture generation, to ensure seamless textures.~~ [Done!]
 * Support for materials based on custom shaders (ig ambitious).
