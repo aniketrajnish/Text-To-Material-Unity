@@ -1,6 +1,8 @@
 # Text-To-Material-Unity
 Generate materials from text prompts in Unity. Uses `chatgpt` and `dall-e` models.
- 
+
+ ![placeholder_t2m](https://github.com/aniketrajnish/Text-To-Material-Unity/assets/58925008/865d1290-4e04-4f8d-b56a-112dc7bc50bf)
+
 https://github.com/aniketrajnish/Text-To-Material-Unity/assets/58925008/59d84850-b002-425e-aeda-0a1c67a77153
 
 ## Updates 
